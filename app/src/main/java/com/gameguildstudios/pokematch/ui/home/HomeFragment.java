@@ -1,6 +1,5 @@
 package com.gameguildstudios.pokematch.ui.home;
 
-
 import android.os.Bundle;
 import java.util.ArrayList;
 import android.view.LayoutInflater;
@@ -17,55 +16,33 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+
 import com.gameguildstudios.pokematch.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class HomeFragment extends Fragment {
-
-    private HomeViewModel homeViewModel;
-
-    private EditText poke1;
-    private EditText poke2;
-    private EditText poke3;
-    private EditText poke4;
-    private EditText poke5;
-    private EditText poke6;
-
-    private TextView type1;
-    private TextView type2;
-    private TextView type3;
-    private TextView type4;
-    private TextView type5;
-    private TextView type6;
-
+    private TextView[] textViews;
+    private EditText[] pokes;
     private Button btn;
 
     private String url;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
 
-        poke1 = root.findViewById(R.id.input_home1);
-        poke2 = root.findViewById(R.id.input_home2);
-        poke3 = root.findViewById(R.id.input_home3);
-        poke4 = root.findViewById(R.id.input_home4);
-        poke5 = root.findViewById(R.id.input_home5);
-        poke6 = root.findViewById(R.id.input_home6);
-
-        type1 = root.findViewById(R.id.type_home1);
-        type2 = root.findViewById(R.id.type_home2);
-        type3 = root.findViewById(R.id.type_home3);
-        type4 = root.findViewById(R.id.type_home4);
-        type5 = root.findViewById(R.id.type_home5);
-        type6 = root.findViewById(R.id.type_home6);
-
+        int[] pokeIds = {R.id.input_home1, R.id.input_home2, R.id.input_home3, R.id.input_home4, R.id.input_home5, R.id.input_home6};
+        int[] ids = {R.id.type_home1,R.id.type_home2,R.id.type_home3,R.id.type_home4,R.id.type_home5,R.id.type_home6};
+        textViews =initTextViews(ids, root);
+        pokes = initEditText(pokeIds,root);
         btn = root.findViewById(R.id.btn_home);
 
         return root;
@@ -73,23 +50,51 @@ public class HomeFragment extends Fragment {
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                ArrayList<String> pokes = new ArrayList<>();
-                addPoke(pokes);
-                for(int i=0; i<pokes.size(); i++){
-                    url="https://pokeapi.co/api/v2/pokemon/" + pokes.get(i).toLowerCase()  +"/";
-                    jsonParse(url);
-                    //request to get type of the Pokemon and update the textView.
+                for(int i=0; i< pokes.length; i++){
+                    if(!isEmpty(pokes[i])){
+                        url="https://pokeapi.co/api/v2/pokemon/" + pokes[i].getText().toString().trim().toLowerCase()  +"/";
+                        jsonParse(url, i);
+                        //request to get type of the Pokemon and update the textView.
+                    }
                 }
-
             }
         });
     }
 
-    private void jsonParse(String url){
+    private void jsonParse(String url, int index){
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        // Request a JSON response from the provided URL.
+        final int typeIndex = index;
+        final JsonObjectRequest res = new JsonObjectRequest(Request.Method.GET, url,null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        String type="Type(s): ";
+                        try {
+                            JSONArray types = response.getJSONArray("types");
+                            for(int i = 0; i<types.length(); i++){
+                                if(types.length() == 2 && i==0)
+                                type += (types.getJSONObject(i).getJSONObject("type").get("name")+", ");
+                                else type += types.getJSONObject(i).getJSONObject("type").get("name");
+                            }
+                        } catch (JSONException e) {
+                            type = "Invalid Pokemon";
+                        }
+                        textViews[typeIndex].setText(type);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String type = "Invalid Pokemon";
+                textViews[typeIndex].setText(type);
+            }
+        });
+        queue.add(res);
         Toast.makeText(getContext(), url,Toast.LENGTH_SHORT).show();
     }
 
@@ -100,27 +105,30 @@ public class HomeFragment extends Fragment {
         return true;
     }
 
-    //Adds the filled EditText to an ArrayList of Pokemon names
-    private ArrayList<String> addPoke(ArrayList<String> pokes){
-        if(!isEmpty(poke1)){
-            pokes.add(poke1.getText().toString());
+    //place all the textViews into an array
+    private TextView[] initTextViews(int[] ids, View view){
+
+        TextView[] collection = new TextView[ids.length];
+
+        for(int i=0; i<ids.length; i++){
+            TextView currentTextView = view.findViewById(ids[i]);
+            collection[i]=currentTextView;
         }
-        if(!isEmpty(poke2)){
-            pokes.add(poke2.getText().toString());
+
+        return collection;
+    }
+
+    //place all the editText into an array
+    private EditText[] initEditText(int[] ids, View view){
+
+        EditText[] collection = new EditText[ids.length];
+
+        for(int i=0; i<ids.length; i++){
+            EditText currentEditText = view.findViewById(ids[i]);
+            collection[i]=currentEditText;
         }
-        if(!isEmpty(poke3)){
-            pokes.add(poke3.getText().toString());
-        }
-        if(!isEmpty(poke4)){
-            pokes.add(poke4.getText().toString());
-        }
-        if(!isEmpty(poke5)){
-            pokes.add(poke5.getText().toString());
-        }
-        if(!isEmpty(poke6)){
-            pokes.add(poke6.getText().toString());
-        }
-        return pokes;
+
+        return collection;
     }
 
 }
