@@ -2,7 +2,7 @@ package com.gameguildstudios.pokematch.ui.home;
 
 
 import android.os.Bundle;
-import android.util.Log;
+import java.util.ArrayList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +51,6 @@ public class HomeFragment extends Fragment {
                 textView.setText(s);
             }
         });
-        //url="https://pokeapi.co/api/v2/pokemon/" + poke(1,2,3,4,5,6).getText() +"/"
 
         poke1 = root.findViewById(R.id.input_home1);
         poke2 = root.findViewById(R.id.input_home2);
@@ -77,13 +76,51 @@ public class HomeFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jsonParse("DONE");
+
+                ArrayList<String> pokes = new ArrayList<>();
+                addPoke(pokes);
+                for(int i=0; i<pokes.size(); i++){
+                    url="https://pokeapi.co/api/v2/pokemon/" + pokes.get(i).toLowerCase()  +"/";
+                    jsonParse(url);
+                    //request to get type of the Pokemon and update the textView.
+                }
+
             }
         });
     }
 
     private void jsonParse(String url){
-        Toast.makeText(getContext(), url,Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), url,Toast.LENGTH_SHORT).show();
+    }
+
+    //Checks whether EditText is empty
+    private boolean isEmpty(EditText etText) {
+        if (etText.getText().toString().trim().length() > 0)
+            return false;
+        return true;
+    }
+
+    //Adds the filled EditText to an ArrayList of Pokemon names
+    private ArrayList<String> addPoke(ArrayList<String> pokes){
+        if(!isEmpty(poke1)){
+            pokes.add(poke1.getText().toString());
+        }
+        if(!isEmpty(poke2)){
+            pokes.add(poke2.getText().toString());
+        }
+        if(!isEmpty(poke3)){
+            pokes.add(poke3.getText().toString());
+        }
+        if(!isEmpty(poke4)){
+            pokes.add(poke4.getText().toString());
+        }
+        if(!isEmpty(poke5)){
+            pokes.add(poke5.getText().toString());
+        }
+        if(!isEmpty(poke6)){
+            pokes.add(poke6.getText().toString());
+        }
+        return pokes;
     }
 
 }
