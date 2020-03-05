@@ -1,4 +1,4 @@
-package com.gameguildstudios.pokematch.ui.notifications;
+package com.gameguildstudios.pokematch.ui.results;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.gameguildstudios.pokematch.R;
 
-public class NotificationsFragment extends Fragment {
+public class ResultsFragment extends Fragment {
 
-    private NotificationsViewModel notificationsViewModel;
+    private ResultsViewModel resultsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                ViewModelProviders.of(this).get(NotificationsViewModel.class);
+        resultsViewModel =
+                ViewModelProviders.of(this).get(ResultsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_results, container, false);
         final TextView textView = root.findViewById(R.id.text_results);
-        notificationsViewModel.getText().observe(this, new Observer<String>() {
+        resultsViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

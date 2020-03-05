@@ -1,4 +1,4 @@
-package com.gameguildstudios.pokematch.ui.dashboard;
+package com.gameguildstudios.pokematch.ui.foe;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,14 +14,14 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.gameguildstudios.pokematch.R;
 
-public class DashboardFragment extends Fragment {
+public class FoeFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private FoeViewModel dashboardViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel.class);
+                ViewModelProviders.of(this).get(FoeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_foe, container, false);
         final TextView textView = root.findViewById(R.id.text_foe);
         dashboardViewModel.getText().observe(this, new Observer<String>() {

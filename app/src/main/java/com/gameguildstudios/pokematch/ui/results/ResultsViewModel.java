@@ -1,16 +1,16 @@
-package com.gameguildstudios.pokematch.ui.dashboard;
+package com.gameguildstudios.pokematch.ui.results;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class DashboardViewModel extends ViewModel {
+public class ResultsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public DashboardViewModel() {
+    public ResultsViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is dashboard fragment");
+        mText.setValue("PokeMatch recommends the following Pokemon from your team.");
     }
 
     public LiveData<String> getText() {
