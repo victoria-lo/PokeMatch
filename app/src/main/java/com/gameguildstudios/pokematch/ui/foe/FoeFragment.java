@@ -27,9 +27,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 public class FoeFragment extends Fragment {
     private TextView[] textViews;
@@ -113,6 +111,7 @@ public class FoeFragment extends Fragment {
 
     }
 
+    //Get weaknesses from API for single type
     private void jsonParseWeakness(String url, int index) {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         final int textIndex = index;
@@ -149,7 +148,6 @@ public class FoeFragment extends Fragment {
         queue.add(res);
     }
 
-
     //Checks whether EditText is empty
     private boolean isEmpty(EditText etText) {
         if (etText.getText().toString().trim().length() > 0)
@@ -183,6 +181,7 @@ public class FoeFragment extends Fragment {
         return collection;
     }
 
+    //Get weaknesses from local JSON for dual types
     private void getJSON(String type, int index){
         // Reading json file from assets folder
         StringBuffer sb = new StringBuffer();
