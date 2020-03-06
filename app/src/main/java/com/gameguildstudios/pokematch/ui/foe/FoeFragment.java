@@ -25,17 +25,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class FoeFragment extends Fragment {
     private TextView[] textViews;
     private EditText[] pokes;
     private Button btn;
 
+    private TextView temp;
     private String url;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_foe, container, false);
-
+        temp = root.findViewById(R.id.type_foe);
         int[] pokeIds = {R.id.input_foe1, R.id.input_foe2, R.id.input_foe3, R.id.input_foe4, R.id.input_foe5, R.id.input_foe6};
         int[] ids = {R.id.type_foe1,R.id.type_foe2,R.id.type_foe3,R.id.type_foe4,R.id.type_foe5,R.id.type_foe6};
         textViews =initTextViews(ids, root);
@@ -53,36 +56,39 @@ public class FoeFragment extends Fragment {
             public void onClick(View v) {
 
                 for(int i=0; i< pokes.length; i++){
+
                     if(!isEmpty(pokes[i])){
                         url="https://pokeapi.co/api/v2/pokemon/" + pokes[i].getText().toString().trim().toLowerCase()  +"/";
-                        jsonParse(url, i);
-                        //request to get type of the Pokemon and update the textView.
+                        jsonParseType(url, i); //request to get type of the Pokemon and then its weaknesses
                     }
                 }
             }
         });
     }
 
-    private void jsonParse(String url, int index){
+    private void jsonParseType(String url, int index){
         RequestQueue queue = Volley.newRequestQueue(getContext());
-        // Request a JSON response from the provided URL.
         final int typeIndex = index;
         final JsonObjectRequest res = new JsonObjectRequest(Request.Method.GET, url,null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        String type="Type(s): ";
                         try {
                             JSONArray types = response.getJSONArray("types");
                             for(int i = 0; i<types.length(); i++){
-                                if(types.length() == 2 && i==0)
-                                    type += (types.getJSONObject(i).getJSONObject("type").get("name")+", ");
-                                else type += types.getJSONObject(i).getJSONObject("type").get("name");
+                                //get type
+                                Object type = types.getJSONObject(i).getJSONObject("type").get("name");
+                                //get url to get weakness
+                                String weakUrl = "https://pokeapi.co/api/v2/type/" + type.toString() + "/";
+                                textViews[typeIndex].setText("Weaknesses: ");
+                                temp.setText("Strengths :");
+                                //request to get weakness
+                                jsonParseWeakness(weakUrl,typeIndex);
                             }
                         } catch (JSONException e) {
-                            type = "Invalid Pokemon";
+                            String weak = "Invalid Pokemon";
+                            textViews[typeIndex].setText(weak);
                         }
-                        textViews[typeIndex].setText(type);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -92,8 +98,56 @@ public class FoeFragment extends Fragment {
             }
         });
         queue.add(res);
-        Toast.makeText(getContext(), url,Toast.LENGTH_SHORT).show();
+
     }
+
+    private void jsonParseWeakness(String url, int index) {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        final int textIndex = index;
+        final JsonObjectRequest res = new JsonObjectRequest(Request.Method.GET, url,null,
+                new Response.Listener<JSONObject>() {
+                    String output = "";
+                    String strength = "";
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONObject dmg = response.getJSONObject("damage_relations");
+                            JSONArray weak = dmg.getJSONArray("double_damage_from");
+                            JSONArray strong = dmg.getJSONArray("half_damage_from");
+
+                            for(int i=0; i<weak.length(); i++){
+                                if(!textViews[textIndex].getText().toString().contains(weak.getJSONObject(i).get("name").toString())) {
+                                    output += (" "+ weak.getJSONObject(i).get("name").toString());
+                                }
+                            }
+
+                            for(int j=0; j<strong.length(); j++){
+                                if(!temp.getText().toString().contains(strong.getJSONObject(j).get("name").toString())){
+                                    strength += (" "+ strong.getJSONObject(j).get("name").toString());
+                                }
+
+                            }
+
+                        } catch (JSONException e) {
+                            output = "Invalid Pokemon";
+                            textViews[textIndex].setText(output);
+                        }
+                        String old = textViews[textIndex].getText().toString();
+                        String oldS = temp.getText().toString();
+
+                        textViews[textIndex].setText(old+output);
+                        temp.setText(oldS+strength);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String type = "Invalid Pokemon";
+                textViews[textIndex].setText(type);
+            }
+        });
+        queue.add(res);
+    }
+
 
     //Checks whether EditText is empty
     private boolean isEmpty(EditText etText) {
