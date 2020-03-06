@@ -69,13 +69,11 @@ public class HomeFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        String type="Type(s): ";
+                        String type="Types:";
                         try {
                             JSONArray types = response.getJSONArray("types");
                             for(int i = 0; i<types.length(); i++){
-                                if(types.length() == 2 && i==0)
-                                type += (types.getJSONObject(i).getJSONObject("type").get("name")+", ");
-                                else type += types.getJSONObject(i).getJSONObject("type").get("name");
+                                type += (" "+types.getJSONObject(i).getJSONObject("type").get("name"));
                             }
                         } catch (JSONException e) {
                             type = "Invalid Pokemon";

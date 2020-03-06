@@ -32,13 +32,12 @@ public class FoeFragment extends Fragment {
     private EditText[] pokes;
     private Button btn;
 
-    private TextView temp;
     private String url;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_foe, container, false);
-        temp = root.findViewById(R.id.type_foe);
+
         int[] pokeIds = {R.id.input_foe1, R.id.input_foe2, R.id.input_foe3, R.id.input_foe4, R.id.input_foe5, R.id.input_foe6};
         int[] ids = {R.id.type_foe1,R.id.type_foe2,R.id.type_foe3,R.id.type_foe4,R.id.type_foe5,R.id.type_foe6};
         textViews =initTextViews(ids, root);
@@ -75,15 +74,19 @@ public class FoeFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONArray types = response.getJSONArray("types");
-                            for(int i = 0; i<types.length(); i++){
-                                //get type
-                                Object type = types.getJSONObject(i).getJSONObject("type").get("name");
-                                //get url to get weakness
+                            if(types.length()<2){//if single type use API
+                                Object type = types.getJSONObject(0).getJSONObject("type").get("name");
                                 String weakUrl = "https://pokeapi.co/api/v2/type/" + type.toString() + "/";
                                 textViews[typeIndex].setText("Weaknesses: ");
-                                temp.setText("Strengths :");
-                                //request to get weakness
                                 jsonParseWeakness(weakUrl,typeIndex);
+                            }
+                            else{
+                                String type1 = types.getJSONObject(0).getJSONObject("type").get("name").toString();
+                                String type2 = types.getJSONObject(1).getJSONObject("type").get("name").toString();
+                                if(type1.compareTo(type2)<0){
+                                    Toast.makeText(getContext(),type1+type2,Toast.LENGTH_SHORT).show();
+                                }else Toast.makeText(getContext(),type2+type1,Toast.LENGTH_SHORT).show();
+
                             }
                         } catch (JSONException e) {
                             String weak = "Invalid Pokemon";
@@ -107,25 +110,17 @@ public class FoeFragment extends Fragment {
         final JsonObjectRequest res = new JsonObjectRequest(Request.Method.GET, url,null,
                 new Response.Listener<JSONObject>() {
                     String output = "";
-                    String strength = "";
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
                             JSONObject dmg = response.getJSONObject("damage_relations");
                             JSONArray weak = dmg.getJSONArray("double_damage_from");
-                            JSONArray strong = dmg.getJSONArray("half_damage_from");
 
                             for(int i=0; i<weak.length(); i++){
                                 if(!textViews[textIndex].getText().toString().contains(weak.getJSONObject(i).get("name").toString())) {
                                     output += (" "+ weak.getJSONObject(i).get("name").toString());
-                                }
-                            }
 
-                            for(int j=0; j<strong.length(); j++){
-                                if(!temp.getText().toString().contains(strong.getJSONObject(j).get("name").toString())){
-                                    strength += (" "+ strong.getJSONObject(j).get("name").toString());
                                 }
-
                             }
 
                         } catch (JSONException e) {
@@ -133,10 +128,7 @@ public class FoeFragment extends Fragment {
                             textViews[textIndex].setText(output);
                         }
                         String old = textViews[textIndex].getText().toString();
-                        String oldS = temp.getText().toString();
-
                         textViews[textIndex].setText(old+output);
-                        temp.setText(oldS+strength);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -181,4 +173,6 @@ public class FoeFragment extends Fragment {
 
         return collection;
     }
+
+
 }
