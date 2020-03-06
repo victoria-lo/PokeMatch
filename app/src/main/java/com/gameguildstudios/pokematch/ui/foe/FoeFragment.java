@@ -25,6 +25,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class FoeFragment extends Fragment {
@@ -83,10 +87,15 @@ public class FoeFragment extends Fragment {
                             else{
                                 String type1 = types.getJSONObject(0).getJSONObject("type").get("name").toString();
                                 String type2 = types.getJSONObject(1).getJSONObject("type").get("name").toString();
+                                String type;
                                 if(type1.compareTo(type2)<0){
-                                    Toast.makeText(getContext(),type1+type2,Toast.LENGTH_SHORT).show();
-                                }else Toast.makeText(getContext(),type2+type1,Toast.LENGTH_SHORT).show();
-
+                                    type = type1+type2;
+                                    Toast.makeText(getContext(),type,Toast.LENGTH_SHORT).show();
+                                }else{
+                                    type = type2+type1;
+                                    Toast.makeText(getContext(),type,Toast.LENGTH_SHORT).show();
+                                }
+                                getJSON(type, typeIndex);
                             }
                         } catch (JSONException e) {
                             String weak = "Invalid Pokemon";
@@ -172,6 +181,50 @@ public class FoeFragment extends Fragment {
         }
 
         return collection;
+    }
+
+    private void getJSON(String type, int index){
+        // Reading json file from assets folder
+        StringBuffer sb = new StringBuffer();
+        BufferedReader br = null;
+        try{
+            br = new BufferedReader(new InputStreamReader(getContext().getAssets().open("weaknesses.json")));
+            String temp;
+            while ((temp = br.readLine()) != null)
+                sb.append(temp);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                br.close(); // stop reading
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        String jsonStr = sb.toString();
+
+
+        // Try to parse JSON
+        try {
+            // Creating JSONObject from String
+            JSONObject jsonObj = new JSONObject(jsonStr);
+            //get weaknesses array
+            JSONArray weaknesses = jsonObj.getJSONArray(type);
+
+            StringBuilder output = new StringBuilder();
+            output.append("Weaknesses: ");
+            for(int i=0; i<weaknesses.length();i++){
+                if(i != weaknesses.length()-1){
+                    output.append((weaknesses.get(i)+" "));
+                }else{
+                    output.append(weaknesses.get(i));
+                }
+            }
+            textViews[index].setText(output.toString());
+        } catch (JSONException e) {
+
+            e.printStackTrace();
+        }
     }
 
 
