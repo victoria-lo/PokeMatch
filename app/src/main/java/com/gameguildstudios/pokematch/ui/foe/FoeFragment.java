@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -20,6 +21,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 
 import com.gameguildstudios.pokematch.R;
+import com.gameguildstudios.pokematch.SharedViewModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +38,8 @@ public class FoeFragment extends Fragment {
 
     private String url;
 
+    private SharedViewModel viewModel;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_foe, container, false);
@@ -51,7 +55,7 @@ public class FoeFragment extends Fragment {
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        viewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +67,7 @@ public class FoeFragment extends Fragment {
                         jsonParseType(url, i); //request to get type of the Pokemon and then its weaknesses
                     }
                 }
+                viewModel.setText(textViews);
             }
         });
     }

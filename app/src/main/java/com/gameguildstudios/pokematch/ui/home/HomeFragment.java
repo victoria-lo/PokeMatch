@@ -1,5 +1,6 @@
 package com.gameguildstudios.pokematch.ui.home;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,14 +54,16 @@ public class HomeFragment extends Fragment {
                 for(int i=0; i< pokes.length; i++){
                     if(!isEmpty(pokes[i])){
                         url="https://pokeapi.co/api/v2/pokemon/" + pokes[i].getText().toString().trim().toLowerCase()  +"/";
-                        jsonParse(url, i);
                         //request to get type of the Pokemon and update the textView.
+                        jsonParse(url, i);
                     }
                 }
             }
         });
     }
 
+
+    //parse the JSON response
     private void jsonParse(String url, int index){
         RequestQueue queue = Volley.newRequestQueue(getContext());
         // Request a JSON response from the provided URL.
