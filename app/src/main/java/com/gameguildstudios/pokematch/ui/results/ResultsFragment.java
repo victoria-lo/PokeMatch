@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.gameguildstudios.pokematch.R;
 import com.gameguildstudios.pokematch.SharedViewModel;
@@ -20,8 +19,9 @@ public class ResultsFragment extends Fragment {
 
     private TextView poke1;
 
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    private SharedViewModel viewModel;
 
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_results, container, false);
         poke1 = root.findViewById(R.id.label_result1);
@@ -30,11 +30,16 @@ public class ResultsFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SharedViewModel model = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        model.getText().observe(getViewLifecycleOwner(), new Observer<CharSequence>() {
+
+    }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        viewModel = new ViewModelProvider(getActivity()).get(SharedViewModel.class);
+        viewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
-            public void onChanged(CharSequence charSequence) {
-                poke1.setText(charSequence);
+            public void onChanged(String s) {
+                poke1.setText(s);
             }
         });
     }

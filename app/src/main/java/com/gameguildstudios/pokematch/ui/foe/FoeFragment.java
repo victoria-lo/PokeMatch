@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -22,6 +23,7 @@ import com.android.volley.VolleyError;
 
 import com.gameguildstudios.pokematch.R;
 import com.gameguildstudios.pokematch.SharedViewModel;
+import com.gameguildstudios.pokematch.VolleyCallBack;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +32,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 
 public class FoeFragment extends Fragment {
     private TextView[] textViews;
@@ -39,6 +42,8 @@ public class FoeFragment extends Fragment {
     private String url;
 
     private SharedViewModel viewModel;
+    private HashMap<String, Integer> map = new HashMap<>();
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -55,24 +60,33 @@ public class FoeFragment extends Fragment {
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                map.clear();
+                for(int i=0; i< pokes.length; i++) {
+                    if (!isEmpty(pokes[i])) {
+                        url = "https://pokeapi.co/api/v2/pokemon/" + pokes[i].getText().toString().trim().toLowerCase() + "/";
+                        jsonParseType(url, i, new VolleyCallBack() {
+                            @Override
+                            public void onSuccess() {
 
-                for(int i=0; i< pokes.length; i++){
-
-                    if(!isEmpty(pokes[i])){
-                        url="https://pokeapi.co/api/v2/pokemon/" + pokes[i].getText().toString().trim().toLowerCase()  +"/";
-                        jsonParseType(url, i); //request to get type of the Pokemon and then its weaknesses
+                            }
+                        });
                     }
                 }
-                viewModel.setText(textViews);
+
             }
+
         });
     }
 
-    private void jsonParseType(String url, int index){
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        viewModel = new ViewModelProvider(getActivity()).get(SharedViewModel.class);
+    }
+
+    private void jsonParseType(String url, int index,final VolleyCallBack callBack){
         RequestQueue queue = Volley.newRequestQueue(getContext());
         final int typeIndex = index;
         final JsonObjectRequest res = new JsonObjectRequest(Request.Method.GET, url,null,
@@ -85,7 +99,16 @@ public class FoeFragment extends Fragment {
                                 Object type = types.getJSONObject(0).getJSONObject("type").get("name");
                                 String weakUrl = "https://pokeapi.co/api/v2/type/" + type.toString() + "/";
                                 textViews[typeIndex].setText("Weaknesses: ");
-                                jsonParseWeakness(weakUrl,typeIndex);
+
+                                jsonParseWeakness(weakUrl, typeIndex, new VolleyCallBack() {
+                                    @Override
+                                    public void onSuccess() {
+                                        String s = getAllWeaknesses(typeIndex).toString();
+                                        viewModel.setMap(s);
+                                        Toast.makeText(getContext(),typeIndex+"  "+s,Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                callBack.onSuccess();
                             }
                             else{
                                 String type1 = types.getJSONObject(0).getJSONObject("type").get("name").toString();
@@ -93,10 +116,8 @@ public class FoeFragment extends Fragment {
                                 String type;
                                 if(type1.compareTo(type2)<0){
                                     type = type1+type2;
-                                    Toast.makeText(getContext(),type,Toast.LENGTH_SHORT).show();
                                 }else{
                                     type = type2+type1;
-                                    Toast.makeText(getContext(),type,Toast.LENGTH_SHORT).show();
                                 }
                                 getJSON(type, typeIndex);
                             }
@@ -117,7 +138,7 @@ public class FoeFragment extends Fragment {
     }
 
     //Get weaknesses from API for single type
-    private void jsonParseWeakness(String url, int index) {
+    private void jsonParseWeakness(String url, int index,final VolleyCallBack callBack) {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         final int textIndex = index;
         final JsonObjectRequest res = new JsonObjectRequest(Request.Method.GET, url,null,
@@ -132,7 +153,6 @@ public class FoeFragment extends Fragment {
                             for(int i=0; i<weak.length(); i++){
                                 if(!textViews[textIndex].getText().toString().contains(weak.getJSONObject(i).get("name").toString())) {
                                     output += (" "+ weak.getJSONObject(i).get("name").toString());
-
                                 }
                             }
 
@@ -142,6 +162,7 @@ public class FoeFragment extends Fragment {
                         }
                         String old = textViews[textIndex].getText().toString();
                         textViews[textIndex].setText(old+output);
+                        callBack.onSuccess();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -151,6 +172,7 @@ public class FoeFragment extends Fragment {
             }
         });
         queue.add(res);
+
     }
 
     //Checks whether EditText is empty
@@ -225,11 +247,29 @@ public class FoeFragment extends Fragment {
                 }
             }
             textViews[index].setText(output.toString());
+
+            String s = getAllWeaknesses(index).toString();
+            Toast.makeText(getContext(),index+"  "+s,Toast.LENGTH_LONG).show();
+            viewModel.setMap(s);
         } catch (JSONException e) {
 
             e.printStackTrace();
         }
     }
 
-
+    private HashMap getAllWeaknesses(Integer i){
+            String s = textViews[i].getText().toString().replace("Weaknesses: ","").trim();
+            String[] arr = s.split(" ");
+            for (int j = 0; j < arr.length; j++) {
+                String w = arr[j];
+                Integer val = map.get(w);
+                if (val != null) {
+                    map.put(w, new Integer (val + 1));
+                }
+                else {
+                    map.put(w, 1);
+                }
+            }
+        return map;
+    }
 }
