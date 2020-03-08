@@ -17,6 +17,6 @@
 4. [AnyChart](https://github.com/AnyChart/AnyChart-Android)
 
 ### Next Steps
-[] Advanced algorithm which takes into account possible opponent's moveset and your own weaknesses
-[] Automatic team input using Text Recognition
-[] Predict common strategies based on opponent's team formation
+- Advanced algorithm which takes into account possible opponent's moveset and your own weaknesses
+- Automatic team input using Text Recognition
+- Predict common strategies based on opponent's team formation
