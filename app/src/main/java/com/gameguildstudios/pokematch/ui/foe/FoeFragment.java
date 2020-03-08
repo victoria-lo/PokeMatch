@@ -105,7 +105,6 @@ public class FoeFragment extends Fragment {
                                     public void onSuccess() {
                                         HashMap s = getAllWeaknesses(typeIndex);
                                         viewModel.setMap(s);
-                                        Toast.makeText(getContext(),typeIndex+"  "+s,Toast.LENGTH_LONG).show();
                                     }
                                 });
                                 callBack.onSuccess();
@@ -249,7 +248,6 @@ public class FoeFragment extends Fragment {
             textViews[index].setText(output.toString());
 
             HashMap s = getAllWeaknesses(index);
-            Toast.makeText(getContext(),index+"  "+s,Toast.LENGTH_LONG).show();
             viewModel.setMap(s);
         } catch (JSONException e) {
 

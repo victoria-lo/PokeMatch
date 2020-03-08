@@ -39,8 +39,14 @@ public class ResultsFragment extends Fragment {
         viewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                poke1.setText(s);
+                poke1.setText(showTopWeakneses(s));
             }
         });
+    }
+
+    private String showTopWeakneses(String s){
+        String s1 = s.replace("{","").replace("}","")
+                .replaceAll("[0-9]","").replaceAll("=","");
+        return s1;
     }
 }
