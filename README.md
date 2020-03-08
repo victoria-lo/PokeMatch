@@ -8,7 +8,7 @@
 3. App will analyse your foe's weaknesses and recommends a team for you that matches the requirements
 
 ### Details
-📝 [DEVLOG](https://medium.com/@victoria2666/100-days-of-code-day-18-19-of-100-5595c67ad22e)
+📝 [DEVLOG](https://medium.com/@victoria2666/100-days-of-code-day-24-28-of-100-8ef4bd62ca33)
 
 ### Resources Used
 1. [PokeAPI](https://pokeapi.co/)
