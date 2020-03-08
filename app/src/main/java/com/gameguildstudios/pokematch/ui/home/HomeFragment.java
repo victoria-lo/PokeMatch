@@ -10,7 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -20,11 +22,15 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 
 import com.gameguildstudios.pokematch.R;
+import com.gameguildstudios.pokematch.SharedViewModel;
+import com.gameguildstudios.pokematch.VolleyCallBack;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class HomeFragment extends Fragment {
     private TextView[] textViews;
@@ -33,6 +39,8 @@ public class HomeFragment extends Fragment {
     private Button btn;
 
     private String url;
+    private SharedViewModel viewModel;
+    private HashMap<String, String> map = new HashMap<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
@@ -53,21 +61,31 @@ public class HomeFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                map.clear();
                 for(int i=0; i< pokes.length; i++){
                     if(!isEmpty(pokes[i])){
                         url="https://pokeapi.co/api/v2/pokemon/" + pokes[i].getText().toString().trim().toLowerCase()  +"/";
                         //request to get type of the Pokemon and update the textView.
-                        jsonParse(url, i);
+                        final Integer index = i;
+                        jsonParse(url, i, new VolleyCallBack() {
+                            @Override
+                            public void onSuccess() {
+                                HashMap s = getAllTypes(index);
+                                viewModel.setNames(s);
+                            }
+                        });
                     }
                 }
             }
         });
     }
 
-
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        viewModel = new ViewModelProvider(getActivity()).get(SharedViewModel.class);
+    }
     //parse the JSON response
-    private void jsonParse(String url, int index){
+    private void jsonParse(String url, int index, final VolleyCallBack callback){
         RequestQueue queue = Volley.newRequestQueue(getContext());
         // Request a JSON response from the provided URL.
         final int typeIndex = index;
@@ -87,6 +105,7 @@ public class HomeFragment extends Fragment {
                             type = "Invalid Pokemon";
                         }
                         textViews[typeIndex].setText(type);
+                        callback.onSuccess();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -142,6 +161,16 @@ public class HomeFragment extends Fragment {
         }
 
         return collection;
+    }
+
+    private HashMap getAllTypes(Integer i){
+        String types = textViews[i].getText().toString().replace("Types: ","").trim();
+        String name = pokes[i].getText().toString();
+
+        if (map.get(name) == null) {
+            map.put(name, types);
+        }
+        return map;
     }
 
 }

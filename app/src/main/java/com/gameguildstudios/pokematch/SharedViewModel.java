@@ -18,7 +18,9 @@ import java.util.Map;
 
 public class SharedViewModel extends ViewModel {
     private final MutableLiveData<String> text = new MutableLiveData<>();
+    private final MutableLiveData<String> text2 = new MutableLiveData<>();
 
+    //FoeFrag
     public void setMap(HashMap hm){
         // Create a list from elements of HashMap
         List<Map.Entry<String, Integer> > list =
@@ -44,6 +46,15 @@ public class SharedViewModel extends ViewModel {
 
     public LiveData<String> getText(){
         return text;
+    }
+
+    //HomeFrag
+    public void setNames(HashMap hm){
+        text2.setValue(hm.toString());
+    }
+
+    public LiveData<String> getNames(){
+        return text2;
     }
 
 }

@@ -5,11 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/image1"
+        android:layout_width="86dp"
+        android:layout_height="86dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.184"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
     <EditText
         android:id="@+id/input_foe1"
         android:layout_width="152dp"
         android:layout_height="48dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="100dp"
         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:ems="10"
         android:hint="Pokemon 1"
@@ -33,7 +44,7 @@
         android:id="@+id/input_foe3"
         android:layout_width="152dp"
         android:layout_height="48dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="76dp"
         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:ems="10"
         android:hint="Pokemon 3"
@@ -44,20 +55,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/type_foe1" />
 
-    <TextView
-        android:id="@+id/type_foe3"
-        android:layout_width="154dp"
-        android:layout_height="59dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.116"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_foe3" />
-
     <EditText
         android:id="@+id/input_foe5"
         android:layout_width="152dp"
         android:layout_height="48dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="76dp"
         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:ems="10"
         android:hint="Pokemon 5"
@@ -68,20 +70,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/type_foe3" />
 
-    <TextView
-        android:id="@+id/type_foe5"
-        android:layout_width="154dp"
-        android:layout_height="59dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.124"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_foe5" />
-
     <EditText
         android:id="@+id/input_foe2"
         android:layout_width="152dp"
         android:layout_height="48dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="100dp"
         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:ems="10"
         android:hint="Pokemon 2"
@@ -96,7 +89,7 @@
         android:id="@+id/input_foe4"
         android:layout_width="152dp"
         android:layout_height="48dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="76dp"
         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:ems="10"
         android:hint="Pokemon 4"
@@ -111,7 +104,7 @@
         android:id="@+id/input_foe6"
         android:layout_width="152dp"
         android:layout_height="48dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="76dp"
         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:ems="10"
         android:hint="Pokemon 6"
@@ -141,6 +134,15 @@
         app:layout_constraintTop_toBottomOf="@+id/input_foe4" />
 
     <TextView
+        android:id="@+id/type_foe3"
+        android:layout_width="154dp"
+        android:layout_height="59dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.116"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_foe3" />
+
+    <TextView
         android:id="@+id/type_foe6"
         android:layout_width="154dp"
         android:layout_height="59dp"
@@ -149,11 +151,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_foe6" />
 
+    <TextView
+        android:id="@+id/type_foe5"
+        android:layout_width="154dp"
+        android:layout_height="59dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.124"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_foe5" />
+
     <Button
         android:id="@+id/btn_foe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="88dp"
         android:backgroundTint="@color/colorPrimary"
         android:text="ENTER"
         android:textColor="@color/design_default_color_background"
@@ -167,7 +178,7 @@
         android:id="@+id/image2"
         android:layout_width="86dp"
         android:layout_height="86dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.803"
         app:layout_constraintStart_toStartOf="parent"
@@ -178,20 +189,9 @@
         android:id="@+id/image4"
         android:layout_width="86dp"
         android:layout_height="86dp"
-        android:layout_marginTop="192dp"
+        android:layout_marginTop="204dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.803"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <ImageView
-        android:id="@+id/image5"
-        android:layout_width="86dp"
-        android:layout_height="86dp"
-        android:layout_marginTop="380dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.184"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
@@ -200,7 +200,7 @@
         android:id="@+id/image3"
         android:layout_width="86dp"
         android:layout_height="86dp"
-        android:layout_marginTop="192dp"
+        android:layout_marginTop="204dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.184"
         app:layout_constraintStart_toStartOf="parent"
@@ -211,7 +211,7 @@
         android:id="@+id/image6"
         android:layout_width="86dp"
         android:layout_height="86dp"
-        android:layout_marginTop="380dp"
+        android:layout_marginTop="388dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.803"
         app:layout_constraintStart_toStartOf="parent"
@@ -219,10 +219,10 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
-        android:id="@+id/image1"
+        android:id="@+id/image5"
         android:layout_width="86dp"
         android:layout_height="86dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="388dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.184"
         app:layout_constraintStart_toStartOf="parent"
