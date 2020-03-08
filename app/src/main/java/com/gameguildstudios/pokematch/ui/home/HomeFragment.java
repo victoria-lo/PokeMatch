@@ -1,6 +1,5 @@
 package com.gameguildstudios.pokematch.ui.home;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -98,7 +96,6 @@ public class HomeFragment extends Fragment {
             }
         });
         queue.add(res);
-        Toast.makeText(getContext(), url,Toast.LENGTH_SHORT).show();
     }
 
     //Checks whether EditText is empty
@@ -134,7 +131,7 @@ public class HomeFragment extends Fragment {
         return collection;
     }
 
-    //place all the imageViewa into an array
+    //place all the imageViews into an array
     private ImageView[] initImg(int[] ids, View view){
 
         ImageView[] collection = new ImageView[ids.length];

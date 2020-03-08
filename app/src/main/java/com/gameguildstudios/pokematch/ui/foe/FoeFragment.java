@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.gameguildstudios.pokematch.R;
 import com.gameguildstudios.pokematch.SharedViewModel;
 import com.gameguildstudios.pokematch.VolleyCallBack;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +39,7 @@ import java.util.HashMap;
 public class FoeFragment extends Fragment {
     private TextView[] textViews;
     private EditText[] pokes;
+    private ImageView[] sprites;
     private Button btn;
 
     private String url;
@@ -51,6 +54,8 @@ public class FoeFragment extends Fragment {
 
         int[] pokeIds = {R.id.input_foe1, R.id.input_foe2, R.id.input_foe3, R.id.input_foe4, R.id.input_foe5, R.id.input_foe6};
         int[] ids = {R.id.type_foe1,R.id.type_foe2,R.id.type_foe3,R.id.type_foe4,R.id.type_foe5,R.id.type_foe6};
+        int[] imgIds = {R.id.image1,R.id.image2,R.id.image3,R.id.image4,R.id.image5,R.id.image6};
+        sprites = initImg(imgIds,root);
         textViews =initTextViews(ids, root);
         pokes = initEditText(pokeIds,root);
         btn = root.findViewById(R.id.btn_foe);
@@ -95,6 +100,8 @@ public class FoeFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONArray types = response.getJSONArray("types");
+                            String imgUrl = response.getJSONObject("sprites").get("front_default").toString();
+                            Picasso.get().load(imgUrl).into(sprites[typeIndex]);
                             if(types.length()<2){//if single type use API
                                 Object type = types.getJSONObject(0).getJSONObject("type").get("name");
                                 String weakUrl = "https://pokeapi.co/api/v2/type/" + type.toString() + "/";
@@ -174,39 +181,6 @@ public class FoeFragment extends Fragment {
 
     }
 
-    //Checks whether EditText is empty
-    private boolean isEmpty(EditText etText) {
-        if (etText.getText().toString().trim().length() > 0)
-            return false;
-        return true;
-    }
-
-    //place all the textViews into an array
-    private TextView[] initTextViews(int[] ids, View view){
-
-        TextView[] collection = new TextView[ids.length];
-
-        for(int i=0; i<ids.length; i++){
-            TextView currentTextView = view.findViewById(ids[i]);
-            collection[i]=currentTextView;
-        }
-
-        return collection;
-    }
-
-    //place all the editText into an array
-    private EditText[] initEditText(int[] ids, View view){
-
-        EditText[] collection = new EditText[ids.length];
-
-        for(int i=0; i<ids.length; i++){
-            EditText currentEditText = view.findViewById(ids[i]);
-            collection[i]=currentEditText;
-        }
-
-        return collection;
-    }
-
     //Get weaknesses from local JSON for dual types
     private void getJSON(String type, int index){
         // Reading json file from assets folder
@@ -253,6 +227,52 @@ public class FoeFragment extends Fragment {
 
             e.printStackTrace();
         }
+    }
+
+    //Checks whether EditText is empty
+    private boolean isEmpty(EditText etText) {
+        if (etText.getText().toString().trim().length() > 0)
+            return false;
+        return true;
+    }
+
+    //place all the textViews into an array
+    private TextView[] initTextViews(int[] ids, View view){
+
+        TextView[] collection = new TextView[ids.length];
+
+        for(int i=0; i<ids.length; i++){
+            TextView currentTextView = view.findViewById(ids[i]);
+            collection[i]=currentTextView;
+        }
+
+        return collection;
+    }
+
+    //place all the editText into an array
+    private EditText[] initEditText(int[] ids, View view){
+
+        EditText[] collection = new EditText[ids.length];
+
+        for(int i=0; i<ids.length; i++){
+            EditText currentEditText = view.findViewById(ids[i]);
+            collection[i]=currentEditText;
+        }
+
+        return collection;
+    }
+
+    //place all the imageViews into an array
+    private ImageView[] initImg(int[] ids, View view){
+
+        ImageView[] collection = new ImageView[ids.length];
+
+        for(int i=0; i<ids.length; i++){
+            ImageView currentImageView = view.findViewById(ids[i]);
+            collection[i]=currentImageView;
+        }
+
+        return collection;
     }
 
     private HashMap getAllWeaknesses(Integer i){
