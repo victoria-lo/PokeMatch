@@ -103,7 +103,8 @@ public class ResultsFragment extends Fragment {
             for(int j=1; j<arr.length;j+=2){
                 if(arr[j].contains(type)){
                     String old = label1.getText().toString();
-                    String cap = arr[j-1].substring(0, 1).toUpperCase() + arr[j-1].substring(1);
+                    String pokemon = arr[j-1].trim();
+                    String cap = pokemon.substring(0, 1).toUpperCase() + pokemon.substring(1);
                     label1.setText(old+"\n"+cap);
                 }
             }
