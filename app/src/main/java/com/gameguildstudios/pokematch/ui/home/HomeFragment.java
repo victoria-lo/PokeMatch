@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 
 import com.gameguildstudios.pokematch.R;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +31,7 @@ import org.json.JSONObject;
 public class HomeFragment extends Fragment {
     private TextView[] textViews;
     private EditText[] pokes;
+    private ImageView[] sprites;
     private Button btn;
 
     private String url;
@@ -37,6 +40,8 @@ public class HomeFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         int[] pokeIds = {R.id.input_home1, R.id.input_home2, R.id.input_home3, R.id.input_home4, R.id.input_home5, R.id.input_home6};
         int[] ids = {R.id.type_foe1,R.id.type_foe2,R.id.type_foe3,R.id.type_home4,R.id.type_home5,R.id.type_home6};
+        int[] imgIds = {R.id.image1,R.id.image2,R.id.image3,R.id.image4,R.id.image5,R.id.image6};
+        sprites = initImg(imgIds,root);
         textViews =initTextViews(ids, root);
         pokes = initEditText(pokeIds,root);
         btn = root.findViewById(R.id.btn_foe);
@@ -75,6 +80,8 @@ public class HomeFragment extends Fragment {
                         String type="Types:";
                         try {
                             JSONArray types = response.getJSONArray("types");
+                            String imgUrl = response.getJSONObject("sprites").get("front_default").toString();
+                            Picasso.get().load(imgUrl).into(sprites[typeIndex]);
                             for(int i = 0; i<types.length(); i++){
                                 type += (" "+types.getJSONObject(i).getJSONObject("type").get("name"));
                             }
@@ -122,6 +129,19 @@ public class HomeFragment extends Fragment {
         for(int i=0; i<ids.length; i++){
             EditText currentEditText = view.findViewById(ids[i]);
             collection[i]=currentEditText;
+        }
+
+        return collection;
+    }
+
+    //place all the imageViewa into an array
+    private ImageView[] initImg(int[] ids, View view){
+
+        ImageView[] collection = new ImageView[ids.length];
+
+        for(int i=0; i<ids.length; i++){
+            ImageView currentImageView = view.findViewById(ids[i]);
+            collection[i]=currentImageView;
         }
 
         return collection;
