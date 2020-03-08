@@ -103,7 +103,7 @@ public class FoeFragment extends Fragment {
                                 jsonParseWeakness(weakUrl, typeIndex, new VolleyCallBack() {
                                     @Override
                                     public void onSuccess() {
-                                        String s = getAllWeaknesses(typeIndex).toString();
+                                        HashMap s = getAllWeaknesses(typeIndex);
                                         viewModel.setMap(s);
                                         Toast.makeText(getContext(),typeIndex+"  "+s,Toast.LENGTH_LONG).show();
                                     }
@@ -248,7 +248,7 @@ public class FoeFragment extends Fragment {
             }
             textViews[index].setText(output.toString());
 
-            String s = getAllWeaknesses(index).toString();
+            HashMap s = getAllWeaknesses(index);
             Toast.makeText(getContext(),index+"  "+s,Toast.LENGTH_LONG).show();
             viewModel.setMap(s);
         } catch (JSONException e) {
