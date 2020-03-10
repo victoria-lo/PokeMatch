@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         int[] pokeIds = {R.id.input_home1, R.id.input_home2, R.id.input_home3, R.id.input_home4, R.id.input_home5, R.id.input_home6};
         int[] ids = {R.id.type_foe1,R.id.type_foe2,R.id.type_foe3,R.id.type_home4,R.id.type_home5,R.id.type_home6};
-        int[] imgIds = {R.id.image1,R.id.image2,R.id.image3,R.id.image4,R.id.image5,R.id.image6};
+        int[] imgIds = {R.id.img1,R.id.img2,R.id.img3,R.id.image4,R.id.image5,R.id.image6};
         sprites = initImg(imgIds,root);
         textViews =initTextViews(ids, root);
         pokes = initEditText(pokeIds,root);

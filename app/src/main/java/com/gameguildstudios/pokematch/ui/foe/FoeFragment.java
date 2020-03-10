@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -54,7 +53,7 @@ public class FoeFragment extends Fragment {
 
         int[] pokeIds = {R.id.input_foe1, R.id.input_foe2, R.id.input_foe3, R.id.input_foe4, R.id.input_foe5, R.id.input_foe6};
         int[] ids = {R.id.type_foe1,R.id.type_foe2,R.id.type_foe3,R.id.type_foe4,R.id.type_foe5,R.id.type_foe6};
-        int[] imgIds = {R.id.image1,R.id.image2,R.id.image3,R.id.image4,R.id.image5,R.id.image6};
+        int[] imgIds = {R.id.img1,R.id.img2,R.id.img3,R.id.image4,R.id.image5,R.id.image6};
         sprites = initImg(imgIds,root);
         textViews =initTextViews(ids, root);
         pokes = initEditText(pokeIds,root);
