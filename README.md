@@ -1,4 +1,5 @@
-# PokeMatch 📱
+![PokeMatch](https://github.com/victoria-lo/PokeMatch/blob/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png?raw=true)
+
 **Type Anaylzer and Team Matcher**
 > 100DaysOfCode: Day 24-28
 
