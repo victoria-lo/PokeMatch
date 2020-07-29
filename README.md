@@ -8,6 +8,14 @@
 2. Add your Foe's Team
 3. App will analyse your foe's weaknesses and recommends a team for you that matches the requirements
 
+### Screenshots
+[](https://miro.medium.com/max/875/1*_E8daffFDlWk8uLCyuWXZQ.jpeg)
+[](https://miro.medium.com/max/875/1*mATv4ou7tpbYbnZTf96BdQ.jpeg)
+[](https://miro.medium.com/max/875/1*abzGKORCJtjCDdiRhy5bDw.jpeg)
+<img display="inline-block" src = "https://miro.medium.com/max/875/1*_E8daffFDlWk8uLCyuWXZQ.jpeg" width="20%">
+<img display="inline-block" src="https://miro.medium.com/max/875/1*mATv4ou7tpbYbnZTf96BdQ.jpeg" width="20%">
+<img display="inline-block" src="https://miro.medium.com/max/875/1*abzGKORCJtjCDdiRhy5bDw.jpeg" width="20%">
+
 ### Details
 📝 [DEVLOG](https://medium.com/@victoria2666/100-days-of-code-day-24-28-of-100-8ef4bd62ca33)
 
